@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .btn-cadastro {
+            width: 90%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-cadastro:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form id="cadastro" method="POST" action="/cadastro">
+        <h1>Cadastro</h1>
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required>
+
+        <label for="email">E-mail:</label>
+        <input type="text" id="email" name="email" required>
+
+        <button type="submit">Cadastrar</button>
+
+        <a href="/login" class="btn-cadastro">Já tenho uma conta</a>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('cadastro').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evita o comportamento padrão de submissão do formulário
+        
+                const formData = new FormData(this);
+                const usuario = formData.get('username');
+                const senha = formData.get('password');
+                const telefone = formData.get('telefone');
+                const email = formData.get('email');
+        
+                fetch('/cadastro', {
+                    method: 'POST',
+                    body: JSON.stringify({ usuario, senha, telefone, email}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ocorreu um erro ao enviar o formulário.');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log(data);
+                    window.location.href = '/login'; // Redireciona para a página de login
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

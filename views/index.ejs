@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Adoção de Cachorro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        document.getElementById('formAdocao').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const formData = new FormData(this);
+            const nome = formData.get('nome');
+            const idade = formData.get('idade');
+            const porte = formData.get('porte');
+            const saude = formData.get('saude');
+    
+            fetch('/adocao-cachorro', {
+                method: 'POST',
+                body: JSON.stringify({ nome, idade, porte, saude }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ocorreu um erro ao enviar o formulário.');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    </script>
+</head>
+<body>
+    <form action="/adocao-cachorro" method="POST" id="formAdocao">
+        <h1>Formulário de Adoção de Cachorro</h1>
+        <label for="nome">Nome do Cachorro:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="idade">Idade do Cachorro:</label>
+        <input type="text" id="idade" name="idade" required>
+
+        <label for="porte">Porte do Cachorro:</label>
+        <select id="porte" name="porte" required>
+            <option value="">Selecione...</option>
+            <option value="pequeno">Pequeno</option>
+            <option value="médio">Médio</option>
+            <option value="grande">Grande</option>
+        </select>
+
+        <label for="saude">Saúde Física do Cachorro:</label>
+        <input type="text" id="saude" name="saude" required>
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
