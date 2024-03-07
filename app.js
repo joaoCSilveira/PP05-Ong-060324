@@ -45,14 +45,15 @@ app.post("/cadastro", (req, res) => {
     }
 });
 
-app.post('/adocao-cachorro', (req, res) => {
+app.post('/adocao-cachorro', async (req, res) => {
     const { nome, idade, porte, saude } = req.body;
     console.log('Dados do formulário recebidos:');
     console.log('Nome:', nome);
     console.log('Idade:', idade);
     console.log('Porte:', porte);
     console.log('Saúde:', saude);
-    res.send('Formulário recebido com sucesso!');
+
+    const addDog = await (await dbOng).execute("INSERT INTO paciente (nome, idade, saude, porte) VALUES (?,?,?,?)", [nome, idade, saude, porte])
 });
 
 app.post('/login', async (req, res) => {
