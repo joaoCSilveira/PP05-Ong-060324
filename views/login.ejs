@@ -83,32 +83,34 @@
     </form>
 </body>
 <script>
-    document.getElementById('login').addEventListener('submit', function(event) {
-        event.preventDefault();
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-        const formData = new FormData(this);
-        const usuario = formData.get('username');
-        const senha = formData.get('password');
+    const formData = new FormData(this);
+    const usuario = formData.get('username');
+    const senha = formData.get('password');
 
-        fetch('/login', {
-            method: 'POST',
-            body: JSON.stringify({ usuario, senha}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Ocorreu um erro ao enviar o formulário.');
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    fetch('/login', {
+        method: 'POST',
+        body: JSON.stringify({ usuario, senha}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ocorreu um erro ao enviar o formulário.');
+        }
+        return response.text();
+    })
+    .then(data => {
+        console.log(data);
+        window.location.href = '/home';
+    })
+    .catch(error => {
+        console.error(error);
     });
+});
+
 </script>
 </html>

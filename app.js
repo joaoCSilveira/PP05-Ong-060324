@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = 3000;
 const dbOng = require("./db_con/dbOng.js")
@@ -55,12 +55,32 @@ app.post('/adocao-cachorro', (req, res) => {
     res.send('Formulário recebido com sucesso!');
 });
 
-app.post('/login', (req, res) => {
-    const {usuario, senha} = req.body
-    console.log(usuario)
-    console.log(senha)
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    console.log("Usuário:", username);
+    console.log("Senha:", password);
 
-})
+    try {
+        if (username && password) {
+            const selectPassword = await (await dbOng).execute("SELECT senha FROM users WHERE usuario = ?", [username]);
+
+                if (selectPassword[0][0].senha == password) {
+                    console.log("Login bem-sucedido");
+                    res.redirect("/home");
+                } else {
+                    console.log("Senha incorreta. Redirecionando para /login");
+                    res.redirect("/login");
+                }
+            } else {
+                console.log("Usuário não encontrado. Redirecionando para /login");
+                res.redirect("/login");
+            }
+    } catch (error) {
+        console.error("Erro ao executar consulta SQL:", error);
+        res.redirect("/login");
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Servidor está rodando em http://localhost:${port}`);

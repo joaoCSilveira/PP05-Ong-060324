@@ -61,16 +61,40 @@
             background-color: #45a049;
         }
     </style>
+</head>
+<body>
+    <form action="/adocao-cachorro" method="POST" id="formAdocao">
+        <h1>Formulário de Adoção de Cachorro</h1>
+        <label for="nome">Nome do Cachorro:</label>
+        <input type="text" id="nome" name="nome" required autocomplete="off">
+
+        <label for="idade">Idade do Cachorro:</label>
+        <input type="text" id="idade" name="idade" required autocomplete="off">
+
+        <label for="porte">Porte do Cachorro:</label>
+        <select id="porte" name="porte" required autocomplete="off">
+            <option value="">Selecione...</option>
+            <option value="pequeno">Pequeno</option>
+            <option value="médio">Médio</option>
+            <option value="grande">Grande</option>
+        </select>
+
+        <label for="saude">Saúde Física do Cachorro:</label>
+        <input type="text" id="saude" name="saude" required autocomplete="off">
+
+        <button type="submit">Enviar</button>
+    </form>
+    
     <script>
         document.getElementById('formAdocao').addEventListener('submit', function(event) {
             event.preventDefault();
-    
+
             const formData = new FormData(this);
             const nome = formData.get('nome');
             const idade = formData.get('idade');
             const porte = formData.get('porte');
             const saude = formData.get('saude');
-    
+
             fetch('/adocao-cachorro', {
                 method: 'POST',
                 body: JSON.stringify({ nome, idade, porte, saude }),
@@ -79,41 +103,19 @@
                 }
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Ocorreu um erro ao enviar o formulário.');
-                }
-                return response.text();
-            })
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        });
+    if (!response.ok) {
+        throw new Error('Ocorreu um erro ao enviar o formulário.');
+    }
+    return response.json();
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+    });
     </script>
-</head>
-<body>
-    <form action="/adocao-cachorro" method="POST" id="formAdocao">
-        <h1>Formulário de Adoção de Cachorro</h1>
-        <label for="nome">Nome do Cachorro:</label>
-        <input type="text" id="nome" name="nome" required>
-
-        <label for="idade">Idade do Cachorro:</label>
-        <input type="text" id="idade" name="idade" required>
-
-        <label for="porte">Porte do Cachorro:</label>
-        <select id="porte" name="porte" required>
-            <option value="">Selecione...</option>
-            <option value="pequeno">Pequeno</option>
-            <option value="médio">Médio</option>
-            <option value="grande">Grande</option>
-        </select>
-
-        <label for="saude">Saúde Física do Cachorro:</label>
-        <input type="text" id="saude" name="saude" required>
-
-        <button type="submit">Enviar</button>
-    </form>
 </body>
 </html>
