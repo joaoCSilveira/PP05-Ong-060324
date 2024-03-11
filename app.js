@@ -20,7 +20,21 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-    res.render("index.ejs");
+    res.render("home.ejs")
+})
+
+app.get("/registro-cachorro", (req, res) => {
+    res.render("registroCachorro.ejs");
+});
+
+app.get("/lista-cachorros", async (req, res) => {
+    try {
+        const cachorros = await obterCachorrosDoBanco();
+        res.render("listaCachorros.ejs", { cachorros });
+    } catch (error) {
+        console.error("Erro ao obter cachorros:", error);
+        res.status(500).send("Erro interno do servidor");
+    }
 });
 
 app.post("/cadastro", (req, res) => {
@@ -45,7 +59,7 @@ app.post("/cadastro", (req, res) => {
     }
 });
 
-app.post('/adocao-cachorro', async (req, res) => {
+app.post('/registro-cachorro', async (req, res) => {
     const { nome, idade, porte, saude } = req.body;
     console.log('Dados do formulário recebidos:');
     console.log('Nome:', nome);
@@ -82,6 +96,15 @@ app.post('/login', async (req, res) => {
     }
 });
 
+async function obterCachorrosDoBanco() {
+    try {
+        const [rows, fields] = await (await dbOng).execute("SELECT * FROM paciente");
+        return rows;
+    } catch (error) {
+        console.error("Erro ao obter cachorros do banco de dados:", error);
+        throw error;
+    }
+}
 
 app.listen(port, () => {
     console.log(`Servidor está rodando em http://localhost:${port}`);
